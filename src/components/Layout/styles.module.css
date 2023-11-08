@@ -1,0 +1,6 @@
+.content {
+  color: var(--white);
+  background-color: var(--background-black);
+  width: 100%;
+  min-height: 100vh;
+}
