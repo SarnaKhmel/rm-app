@@ -1,0 +1,51 @@
+.header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: var(--white);
+  z-index: 1000;
+}
+
+.header > * {
+  margin: 10px 27px;
+}
+
+.main {
+  margin-top: 40px;
+  width: 100%;
+  height: 345px;
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+.hero > * {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.slogan {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  font-size: 101.25px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 111.375px;
+  text-align: center;
+}
