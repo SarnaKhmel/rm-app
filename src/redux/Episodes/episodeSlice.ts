@@ -1,23 +1,28 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Result } from './Episode';
+import { Result, ApiResponse } from './Episode';
 
-export const fetchEpisodes = createAsyncThunk("episodes/fetchEpisodes", async () => {
-  const allEpisodes: Result[] = [];
+export const fetchEpisodes = createAsyncThunk<Result[], void>(
+  "episodes/fetchEpisodes",
+  async () => {
+    const allEpisodes: Result[] = [];
 
-  const fetchEpisodesRecursive = async (url: string) => {
-    const response = await axios.get(url);
-    allEpisodes.push(...response.data.results);
+    const fetchEpisodesRecursive = async (url: string) => {
+      const response = await axios.get<ApiResponse>(url);
+      allEpisodes.push(...response.data.results);
 
-    if (response.data.info.next) {
-      await fetchEpisodesRecursive(response.data.info.next);
-    }
-  };
+      if (response.data.info.next) {
+        await fetchEpisodesRecursive(response.data.info.next);
+      }
+    };
 
-  await fetchEpisodesRecursive("https://rickandmortyapi.com/api/episode");
+    await fetchEpisodesRecursive("https://rickandmortyapi.com/api/episode");
 
-  return allEpisodes;
-});
+    return allEpisodes;
+  }
+);
+
+
 
 interface EpisodeState {
   episodes: Result[];
