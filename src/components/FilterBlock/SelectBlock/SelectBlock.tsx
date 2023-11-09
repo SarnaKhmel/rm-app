@@ -1,24 +1,19 @@
 import { Cascader, Input } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEpisodes } from '../../../redux/Episodes/episodeSlice';
 import { fetchLocation } from '../../../redux/Location/locationSlice';
-
-import { Result } from '../../../redux/Episodes/Episode'
+import { selectEpisodes, selectLocation } from '../../../redux/selectors';
 
 const SelectInput: React.FC = () => {
     const dispatch = useDispatch();
-    const episodes = useSelector((state: any) => state.episodes);
-    const location = useSelector((state: any) => state.location);
+    const episodes = useSelector(selectEpisodes);
+    const locations = useSelector(selectLocation);
 
     useEffect(() => {
-        dispatch(fetchEpisodes() as any);
+        dispatch(fetchEpisodes() as any,);
         dispatch(fetchLocation() as any);
-    }, []);
-
-    console.log("location", location);
-    console.log("episodes", episodes);
-
+    }, [dispatch]);
 
     const getUniqueValues = (key: string, data: any[]) => {
         const uniqueValues = new Set(data.map((item: any) => item[key]));
@@ -33,7 +28,7 @@ const SelectInput: React.FC = () => {
                 {
                     label: "Add Name",
                     value: "Name",
-                    children: getUniqueValues("name", location.locations).map((locationName) => ({
+                    children: getUniqueValues("name", locations).map((locationName) => ({
                         label: locationName,
                         value: locationName,
                         children: [],
@@ -42,7 +37,7 @@ const SelectInput: React.FC = () => {
                 {
                     label: "Add Type",
                     value: "type",
-                    children: getUniqueValues("type", location.locations).map((type) => ({
+                    children: getUniqueValues("type", locations).map((type) => ({
                         label: type,
                         value: type,
                         children: [],
@@ -51,7 +46,7 @@ const SelectInput: React.FC = () => {
                 {
                     label: "Add Dimension",
                     value: "dimension",
-                    children: getUniqueValues("dimension", location.locations).map((dimension) => ({
+                    children: getUniqueValues("dimension", locations).map((dimension) => ({
                         label: dimension,
                         value: dimension,
                         children: [],
@@ -65,17 +60,17 @@ const SelectInput: React.FC = () => {
             children: [
                 {
                     label: "Add Name",
-                    value: "Name",
-                    children: episodes.episodes.map((childEpisodesItem: any) => ({
+                    value: "episodeName",
+                    children: episodes.map((childEpisodesItem: any) => ({
                         label: childEpisodesItem.episodeName,
-                        value: childEpisodesItem.id,
+                        value: childEpisodesItem.episodeName,
                         children: [],
                     })),
                 },
                 {
                     label: "Add Episode Number",
                     value: "EpisodeNumber",
-                    children: episodes.episodes.map((childEpisodesItem: any) => ({
+                    children: episodes.map((childEpisodesItem: any) => ({
                         label: childEpisodesItem.id,
                         value: childEpisodesItem.id,
                         children: [],
@@ -89,6 +84,7 @@ const SelectInput: React.FC = () => {
             children: [],
         },
     ];
+
 
     return (
         <div>

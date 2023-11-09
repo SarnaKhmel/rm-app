@@ -5,7 +5,7 @@ import locationReducer from "./Location/locationSlice";
 
 const RootReducer = combineReducers({
     episodes: episodeReducer,
-    location: locationReducer,
+    locations: locationReducer,
 });
 
 export default RootReducer;

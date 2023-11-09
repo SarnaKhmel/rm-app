@@ -1,14 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Result } from './Location';
+import { Location } from '../types';
 
-export const fetchLocation = createAsyncThunk("episodes/fetchEpisodes", async () => {
-  const allLocation: Result[] = [];
+export const fetchLocation = createAsyncThunk<Location[], void>("locations/fetchLocation", async () => {
+  const allLocation: Location[] = [];
 
   const fetchLocationRecursive = async (url: string) => {
     const response = await axios.get(url);
     allLocation.push(...response.data.results);
-
     if (response.data.info.next) {
       await fetchLocationRecursive(response.data.info.next);
     }
@@ -20,7 +19,7 @@ export const fetchLocation = createAsyncThunk("episodes/fetchEpisodes", async ()
 });
 
 interface LocationState {
-  locations: Result[];
+  locations: Location[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | undefined;
 }
@@ -31,8 +30,10 @@ const initialState: LocationState = {
   error: undefined,
 };
 
+
+
 const locationSlice = createSlice({
-  name: "episodes",
+  name: "locations",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -42,7 +43,10 @@ const locationSlice = createSlice({
       })
       .addCase(fetchLocation.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.locations = action.payload;
+        state.locations = action.payload.map((location) => ({
+          ...location,
+          locationName: location.name, 
+        }));
       })
       .addCase(fetchLocation.rejected, (state, action) => {
         state.status = "failed";
