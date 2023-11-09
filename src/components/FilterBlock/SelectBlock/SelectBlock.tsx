@@ -4,8 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchEpisodes } from '../../../redux/Episodes/episodeSlice';
 import { fetchLocation } from '../../../redux/Location/locationSlice';
 
-import { Result } from '../../../redux/Episodes/Episode'
-
 const SelectInput: React.FC = () => {
     const dispatch = useDispatch();
     const episodes = useSelector((state: any) => state.episodes);
