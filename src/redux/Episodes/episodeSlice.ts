@@ -1,14 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Result, ApiResponse } from './Episode';
+import { Episodes } from '../types';
 
-export const fetchEpisodes = createAsyncThunk<Result[], void>(
+export const fetchEpisodes = createAsyncThunk<Episodes[], void>(
   "episodes/fetchEpisodes",
   async () => {
-    const allEpisodes: Result[] = [];
+    const allEpisodes: Episodes[] = [];
 
     const fetchEpisodesRecursive = async (url: string) => {
-      const response = await axios.get<ApiResponse>(url);
+      const response = await axios.get(url);
       allEpisodes.push(...response.data.results);
 
       if (response.data.info.next) {
@@ -25,7 +25,7 @@ export const fetchEpisodes = createAsyncThunk<Result[], void>(
 
 
 interface EpisodeState {
-  episodes: Result[];
+  episodes: Episodes[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | undefined;
 }
@@ -47,7 +47,10 @@ const episodeSlice = createSlice({
       })
       .addCase(fetchEpisodes.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.episodes = action.payload;
+        state.episodes = action.payload.map((episode) => ({
+          ...episode,
+          episodeName: episode.name, 
+        }));
       })
       .addCase(fetchEpisodes.rejected, (state, action) => {
         state.status = "failed";
